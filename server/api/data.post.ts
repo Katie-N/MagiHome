@@ -1,3 +1,4 @@
+import { gameState } from './utils/gameState'
 import { readPlayerDB, writePlayerDB, hasPlayer, getSensor, getPlayer, Sensor, addScoreToPlayer } from './utils/store'
 const runtimeConfig = useRuntimeConfig()
 
@@ -11,11 +12,12 @@ const runtimeConfig = useRuntimeConfig()
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  // First check if a game is in progress. 
+  // First check if a game is in progress.   
   // If there is a game in progress:
+  if (gameState.active) {
     //  Pass to game handler
-  // Else if wand has been registered:
-  if (hasPlayer(body.wandID)){
+    passToGame(body)
+  } else if (hasPlayer(body.wandID)){ // Else if wand has been registered:
     // Take appropriate action based on sensor ID and custom wand config (if applicable)
     let sensor = getSensor(body.sensorID)
     if (sensor) {
@@ -32,7 +34,6 @@ export default defineEventHandler(async (event) => {
       })
     }
   }
-
   // Else
   else {
   // If the wand registration page is open, populate it with the detected wand ID (is this possible??)
@@ -86,4 +87,14 @@ async function playSoundEffect(mediaName: string) {
     }),
   })
   return response
+}
+
+async function passToGame(eventBody) {
+  if (gameState.gameType == "hotPotato") {
+    const response = await $fetch("/api/game/passPotato", {
+      method: 'POST',
+      body: eventBody
+    })
+    return response
+  }
 }

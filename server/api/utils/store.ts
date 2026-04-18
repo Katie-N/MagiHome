@@ -59,6 +59,11 @@ export function getPlayer(wandID: string): Player | null {
   return db[wandID] ?? null
 }
 
+export function getPlayerColor(wandID: string): string | null {
+  const db = readPlayerDB()
+  return db[wandID].color ?? null
+}
+
 // Check if a wandID exists
 export function hasPlayer(wandID: string): boolean {
   const db = readPlayerDB()
