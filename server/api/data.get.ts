@@ -1,5 +1,5 @@
-import { readStore } from './utils/store'
+import { readPlayerDB } from './utils/store'
 
 export default defineEventHandler(() => {
-  return readStore()
+  return readPlayerDB()
 })
