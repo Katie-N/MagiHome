@@ -14,7 +14,7 @@ while True:
         num_arr = bytearray(number)
         if hex(num_arr[0]) == '0xaa':
             wand_id = (num_arr[1] << 24) | (num_arr[2] << 16) | (num_arr[3] << 8) | (num_arr[4])
-            print(hex(wand_id))
+            print(wand_id)
             magnitude = (num_arr[5] << 8)| (num_arr[6])
             sensor = num_arr[7]
             print(sensor)
