@@ -7,6 +7,7 @@ const sensorDBFilePath = join(process.cwd(), 'sensorDB.json')
 type Player = {
   username: string
   color: string
+  sparkleSound: number
   score: number
   // add more fields here
 }

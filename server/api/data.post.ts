@@ -19,7 +19,9 @@ export default defineEventHandler(async (event) => {
     // Take appropriate action based on sensor ID and custom wand config (if applicable)
     let sensor = getSensor(body.sensorID)
     if (sensor) {
-      return await callHAAPI(sensor, body.wandID)
+      playSoundEffect("sparkle1.mp3")
+      let status = await callHAAPI(sensor, body.wandID)
+      // if status.code == success
     } else {
       console.log("Sensor ID " + body.sensorID + " is not in our database")
     }
@@ -52,6 +54,24 @@ async function callHAAPI(sensor: Sensor, wandID: string) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(sensor.apiBody),
+  })
+  return response
+}
+
+async function playSoundEffect(mediaName: string) {
+  // TODO: Later add support for playing the sparkle effect defined in playerDB
+
+  const response = await $fetch('http://192.168.12.98:8123/api/services/media_player/play_media', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + runtimeConfig.bearer_token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "entity_id": "media_player.googlehome2431",
+      "media_content_id": "media-source://media_source/local/" + mediaName,
+      "media_content_type": "music"
+    }),
   })
   return response
 }
