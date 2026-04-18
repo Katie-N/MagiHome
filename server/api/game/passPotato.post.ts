@@ -4,7 +4,7 @@ const runtimeConfig = useRuntimeConfig()
 
 
 export default defineEventHandler(async (event) => {
-  const { wandID } = await readBody(event)
+  let { wandID } = await readBody(event)
   if (gameState.gameType !== 'hotPotato') {
     throw createError({ statusCode: 400, message: 'Not a hot potato game' })
   }
@@ -19,6 +19,9 @@ export default defineEventHandler(async (event) => {
       console.log("game state didn't get properly defined")
       return
     }
+    
+    wandID = wandID.toString()
+
     if (!gameState.players.includes(wandID)) {
       console.log("youre not playing " + wandID + " not in " + gameState.players)
       return
@@ -76,8 +79,8 @@ async function playSoundEffect(mediaName: string) {
   return response
 }
 
-// Play a sound effect that is already presen in HA media folder. 
-async function lightUpNextPlayer(newColor: string) {
+// Play a sound effect that is already present in HA media folder. 
+export async function lightUpNextPlayer(newColor: string) {
   // TODO: Later add support for playing the sparkle effect defined in playerDB
 
   const response = await $fetch('http://192.168.12.98:8123/api/services/light/turn_on', {

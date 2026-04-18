@@ -1,4 +1,6 @@
 import { gameState } from '../utils/gameState'
+import { lightUpNextPlayer } from './passPotato.post'
+import { getPlayerColor } from '../utils/store'
 
 // expects gameType: string
 // wandID: string for the player who's turn it is
@@ -11,5 +13,13 @@ export default defineEventHandler(async (event) => {
   gameState.currentHolder = wandID
   gameState.players = players
 
+  if (gameType == "hotPotato") {
+    initHotPotato(wandID)
+  }
+
   return { success: true }
 })
+
+function initHotPotato(firstPlayer) {
+  lightUpNextPlayer(getPlayerColor(firstPlayer))
+}

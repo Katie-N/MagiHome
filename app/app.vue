@@ -1,6 +1,5 @@
  <template>
- <div class="bg-yellow-100 min-h-screen min-width-screen">
-    <p class="font-whisper">hello</p>
+ <div class="min-h-screen min-width-screen">
     <NuxtPage />
   </div>
 </template>
