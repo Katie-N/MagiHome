@@ -73,6 +73,13 @@ export function setPlayer(wandID: string, data: Player) {
 }
 
 // Update specific fields on an existing player
+export function addScoreToPlayer(wandID: string, points: number) {
+  const db = readPlayerDB()
+  if (!(wandID in db)) throw new Error(`Player ${wandID} not found`)
+  updatePlayer(wandID, {"score": db[wandID].score += points})
+}
+
+// Update specific fields on an existing player
 export function updatePlayer(wandID: string, updates: Partial<Player>) {
   const db = readPlayerDB()
   if (!(wandID in db)) throw new Error(`Player ${wandID} not found`)

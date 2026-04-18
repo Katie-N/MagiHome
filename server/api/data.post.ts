@@ -1,4 +1,4 @@
-import { readPlayerDB, writePlayerDB, hasPlayer, getSensor, getPlayer, Sensor } from './utils/store'
+import { readPlayerDB, writePlayerDB, hasPlayer, getSensor, getPlayer, Sensor, addScoreToPlayer } from './utils/store'
 const runtimeConfig = useRuntimeConfig()
 
 // Expects data of the form:
@@ -19,11 +19,17 @@ export default defineEventHandler(async (event) => {
     // Take appropriate action based on sensor ID and custom wand config (if applicable)
     let sensor = getSensor(body.sensorID)
     if (sensor) {
+      // Play the sparkle sound effect.
+      // If the speaker is used by the sensor it will not play the sparkle 
       playSoundEffect("sparkle1.mp3")
       let status = await callHAAPI(sensor, body.wandID)
-      // if status.code == success
+
+      addScoreToPlayer(body.wandID, 10)
     } else {
-      console.log("Sensor ID " + body.sensorID + " is not in our database")
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'sensorID ' + body.sensorID + " is not in our database",
+      })
     }
   }
 
@@ -31,11 +37,16 @@ export default defineEventHandler(async (event) => {
   else {
   // If the wand registration page is open, populate it with the detected wand ID (is this possible??)
     console.log("register your wand, magi")
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'wandID ' + body.wandID + " is not in our database",
+    })
   }
 
     // Also consider a sole sensor specifically for wand registration. Then anytime data from that sensor comes in, you know its to register a wand or check your stats
 })
 
+// Call a HA API to perform an action on a device (turn on a light, turn on a smart plug, etc.)
 async function callHAAPI(sensor: Sensor, wandID: string) {
   // If the sensor is color changing, use the wand caster's color
   if (sensor.colorChanging) {
@@ -58,6 +69,7 @@ async function callHAAPI(sensor: Sensor, wandID: string) {
   return response
 }
 
+// Play a sound effect that is already presen in HA media folder. 
 async function playSoundEffect(mediaName: string) {
   // TODO: Later add support for playing the sparkle effect defined in playerDB
 
