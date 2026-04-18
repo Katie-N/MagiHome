@@ -7,6 +7,7 @@ const sensorDBFilePath = join(process.cwd(), 'sensorDB.json')
 type Player = {
   username: string
   color: string
+  sparkleSound: number
   score: number
   // add more fields here
 }
@@ -58,6 +59,11 @@ export function getPlayer(wandID: string): Player | null {
   return db[wandID] ?? null
 }
 
+export function getPlayerColor(wandID: string): string | null {
+  const db = readPlayerDB()
+  return db[wandID].color ?? null
+}
+
 // Check if a wandID exists
 export function hasPlayer(wandID: string): boolean {
   const db = readPlayerDB()
@@ -69,6 +75,13 @@ export function setPlayer(wandID: string, data: Player) {
   const db = readPlayerDB()
   db[wandID] = data
   writePlayerDB(db)
+}
+
+// Update specific fields on an existing player
+export function addScoreToPlayer(wandID: string, points: number) {
+  const db = readPlayerDB()
+  if (!(wandID in db)) throw new Error(`Player ${wandID} not found`)
+  updatePlayer(wandID, {"score": db[wandID].score += points})
 }
 
 // Update specific fields on an existing player
