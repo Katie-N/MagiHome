@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const response = await $fetch('http://192.168.12.98:8123/api/services/media_player/play_media', {
     method: 'POST',
     headers: {
-      'Authorization': runtimeConfig.bearer_token,
+      'Authorization': 'Bearer ' + runtimeConfig.bearer_token,
       'Content-Type': 'application/json'
     },
     // body: '{"entity_id": "media_player.googlehome2431", "media_content_id": "media-source://media_source/local/Click.m4a", "media_content_type": "music"}',
