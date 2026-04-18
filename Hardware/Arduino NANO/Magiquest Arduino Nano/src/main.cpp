@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #define DECODE_MAGIQUEST
 #include <IRremote.hpp> 
-void onIRReceived(uint8_t pin);
+void onIRReceived(uint16_t command, uint32_t fullWandID,uint8_t pin);
+
 // Define your IR receiver pins
 const uint8_t IR_PINS[] = {2, 3,};
 const uint8_t NUM_RECEIVERS = sizeof(IR_PINS) / sizeof(IR_PINS[0]);
@@ -17,31 +18,34 @@ void loop() {
   //Serial.println("Loop running");
   for (uint8_t i = 0; i < NUM_RECEIVERS; i++) {
     IrReceiver.begin(IR_PINS[i], ENABLE_LED_FEEDBACK, USE_DEFAULT_FEEDBACK_LED_PIN);
-    ;
-    int rawlen = IrReceiver.decodedIRData.rawlen;
-    delay(1);
-    if (IrReceiver.decode()) {
-      //Serial.print("Signal received on pin ") ;
-      //Serial.print(IR_PINS[i]);
-      
-      // Handle which pin fired
-      IrReceiver.printIRResultShort(&Serial);
+    if (IrReceiver.isIdle()){
+      //&& IrReceiver.decodedIRData.rawlen == 112
+      bool validSignal = ; 
+        
+        
+      if (IrReceiver.decode()) {
+        //Serial.print("Signal received on pin ") ;
+        //Serial.print(IR_PINS[i]);
+        
+        // Handle which pin fired
+        //IrReceiver.printIRResultShort(&Serial);
+        onIRReceived(IR_PINS[i]);
 
-      onIRReceived(IR_PINS[i]);
-
-       // Ready for next signal
+          // Ready for next signal
+      }
+      IrReceiver.resume();
     }
-    IrReceiver.resume();
   }
 }
 //* This works for 2 sensors. 
 void onIRReceived(uint8_t pin) {
-  Serial.print(" on pin ");
-  Serial.println(pin);
   uint16_t command = IrReceiver.decodedIRData.command; //  Magnitude and checksum
   uint32_t fullWandID = ((uint32_t)IrReceiver.decodedIRData.extra << 16) | IrReceiver.decodedIRData.address;// wand ID
+  //Serial.print(" on pin ");
+ // Serial.println(pin);
  
-  IrReceiver.printIRResultShort(&Serial);
+ 
+  //IrReceiver.printIRResultShort(&Serial);
      uint8_t frame[8];
     frame[0] = 0xAA;               // Start byte
     frame[1] = (fullWandID >> 24) & 0xFF;  // ID MSB
