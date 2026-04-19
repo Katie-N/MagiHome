@@ -1,9 +1,11 @@
 <template>
     <div>
-        <p class="">this is a leaderboard</p>
-        <div class="flex flex-col align-center">
-            <p v-for="player in players">{{player.username}}: {{ player.score }}</p>
-        </div>
+        <img src="/leaderboard/bulletinBoard.jpg" alt="" class="w-screen h-screen absolute -z-10">
+        <div class="bg-[url(/leaderboard/scroll.png)] h-screen md:p-12 absolute left-0 right-0 m-auto bg-contain bg-no-repeat bg-center">
+            <div class="flex flex-col align-center h-full justify-center md:justify-around py-12">
+                <p v-for="player in players" class="font-whisper text-5xl md:text-8xl text-center">{{player.username}}: {{ player.score }}</p>
+            </div>
+        </div>        
     </div>
 </template>
 
