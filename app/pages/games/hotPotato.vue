@@ -1,20 +1,26 @@
 <template>
     <div>
         <!-- bg-img -->
-         <!-- Explanation -->
-        hot potato
-        Select the wizards who will be playing
-        When the light turns your color, you must cast your wand to pass it to the next player. 
-        If the timer runs out and your color is on the lamp, you are out.
-        <!-- Start Game -->
-        who is playing?
-        <form v-on:submit="startGame">
-            <div v-for="player in players">
-                <input name="players" :id="player.wandID" type="checkbox" />
-                {{ player.username }}
-            </div>
-            <button type="submit">Start Game</button>
-        </form>
+        <img src="/wizard hot potato.webp" alt="" class="w-screen h-screen absolute -z-10">
+        <!-- Explanation -->
+        <h1 class="text-9xl text-center font-whisper">hot potato</h1>
+        <div class="w-screen flex flex-row ">
+            <p class="flex-auto text-right text-2xl">
+                When the light turns your color, you must cast your wand to pass it to the next player. <br>
+                If the timer runs out and your color is on the lamp, you are out. If you don't lose, you will get points.
+            </p>
+            <!-- Start Game -->
+            <form v-on:submit="startGame" class="flex-auto">
+                <div v-for="player in players">
+                    <input name="players" :id="player.wandID" type="checkbox" />
+                    {{ player.username }}
+                </div>
+                <button type="submit">Start Game</button>
+            </form>
+        </div>
+
+        
+
     </div>
 </template>
 
