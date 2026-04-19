@@ -34,3 +34,5 @@ sensorDB.json
 .vscode/launch.json
 .vscode/ipch
 .src/Private.h
+Hardware/Arduino ESP32/ESP32/src/private.h
+Hardware/Pi Pico 2 W/secrets.py
