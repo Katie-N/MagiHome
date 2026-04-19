@@ -2,17 +2,18 @@ import machine
 import time
 import network
 from umqtt.simple import MQTTClient
+import secrets.py
 import json
 import urequests
 
 # --- Configuration ---
-WIFI_SSID = "arctic"
-WIFI_PASS = "BreadofLife!"
-MQTT_BROKER = "192.168.12.243"
-MQTT_PORT = 1883
-MQTT_CLIENT_ID = "pico2w_client"
-mqtt_username = "Lucas"
-mqtt_password = "JviG^xupB48h*Md"
+WIFI_SSID = secrets.WIFI_SSID
+WIFI_PASS = secrets.WIFI_PASS
+MQTT_BROKER = secrets.MQTT_BROKER
+MQTT_PORT = secrets.MQTT_PORT
+MQTT_CLIENT_ID = secrets.MQTT_CLIENT_ID
+mqtt_username = secrets.mqtt_username
+mqtt_password = secrets.mqtt_password
 
 STATE_TOPIC = b"home/pico/sensors/state"
 
@@ -71,7 +72,9 @@ uart = machine.UART(0, baudrate=9600, tx=machine.Pin(0), rx=machine.Pin(1))
 
 # --- Main Loop ---
 while True:
+    #print("in loop")
     if uart.any():
+        #print("in uart")
         number = uart.read()
         num_arr = bytearray(number)
 
