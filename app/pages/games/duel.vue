@@ -1,6 +1,10 @@
 <template>
     <div>
         <!-- bg-img -->
+        <div class="absolute w-screen flex flex-row bottom-0 justify-between items-baseline" >
+            <img src="/games/wizard silhouette 2.png" alt="" class="h-3/4">
+            <img src="/games/wizard silhouette.png" alt="" class="h-3/4">
+        </div>
         <!-- <img src="/wizard hot potato.webp" alt="" class="w-screen h-screen absolute -z-10"> -->
         <!-- Explanation -->
         <h1 class="text-9xl text-center font-whisper">Wizard Duel</h1>
