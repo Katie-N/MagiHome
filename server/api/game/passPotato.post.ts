@@ -1,5 +1,6 @@
 import { gameState } from '../utils/gameState'
 import { getPlayerColor, getPlayer } from '../utils/store'
+import { changeStatusLight } from '../data.post'
 const runtimeConfig = useRuntimeConfig()
 
 
@@ -38,10 +39,10 @@ export default defineEventHandler(async (event) => {
       let loser = getPlayer(wandID)
       if (loser) {
         console.log(loser?.username)
-        lightUpNextPlayer(loser.color)
+        changeStatusLight(loser.color)
       } else {
         console.log("Unknown which player was too quick")
-        lightUpNextPlayer("white")
+        changeStatusLight("white")
       }      
       playSoundEffect("Im sorry magi deep.mp3")
       gameState.active = false
@@ -53,7 +54,7 @@ export default defineEventHandler(async (event) => {
     // light up with the next player's color.
     playSoundEffect("sparkle3.mp3")
     let newColor = getPlayerColor(gameState.currentHolder)
-    lightUpNextPlayer(newColor)
+    changeStatusLight(newColor)
   } else {
     console.log("Go home alexander.")
   }
@@ -74,24 +75,6 @@ async function playSoundEffect(mediaName: string) {
       "entity_id": "media_player.googlehome2431",
       "media_content_id": "media-source://media_source/local/" + mediaName,
       "media_content_type": "music"
-    }),
-  })
-  return response
-}
-
-// Play a sound effect that is already present in HA media folder. 
-export async function lightUpNextPlayer(newColor: string) {
-  // TODO: Later add support for playing the sparkle effect defined in playerDB
-
-  const response = await $fetch('http://192.168.12.98:8123/api/services/light/turn_on', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + runtimeConfig.bearer_token,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      "entity_id": "light.wiz_bulb",
-      "color_name": newColor
     }),
   })
   return response

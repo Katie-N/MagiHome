@@ -71,7 +71,7 @@ async function callHAAPI(sensor: Sensor, wandID: string) {
 }
 
 // Play a sound effect that is already presen in HA media folder. 
-async function playSoundEffect(mediaName: string) {
+export async function playSoundEffect(mediaName: string) {
   // TODO: Later add support for playing the sparkle effect defined in playerDB
 
   const response = await $fetch('http://192.168.12.98:8123/api/services/media_player/play_media', {
@@ -96,5 +96,26 @@ async function passToGame(eventBody) {
       body: eventBody
     })
     return response
+  } else if (gameState.gameType == "quickDraw") {
+    const response = await $fetch("/api/game/quickDrawLogic", {
+      method: 'POST',
+      body: eventBody
+    })
+    return response
   }
+}
+
+export async function changeStatusLight(newColor: string) {
+  const response = await $fetch('http://192.168.12.98:8123/api/services/light/turn_on', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + runtimeConfig.bearer_token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "entity_id": "light.wiz_bulb",
+      "color_name": newColor
+    }),
+  })
+  return response
 }
