@@ -1,5 +1,5 @@
 import { gameState } from '../utils/gameState'
-import { getPlayerColor, getPlayer } from '../utils/store'
+import { getPlayerColor, getPlayer, addScoreToPlayer } from '../utils/store'
 const runtimeConfig = useRuntimeConfig()
 
 
@@ -35,16 +35,8 @@ export default defineEventHandler(async (event) => {
   
     if (gameState.currentHolder != wandID) {
       console.log("OOPS, not your turn! ")
-      let loser = getPlayer(wandID)
-      if (loser) {
-        console.log(loser?.username)
-        lightUpNextPlayer(loser.color)
-      } else {
-        console.log("Unknown which player was too quick")
-        lightUpNextPlayer("white")
-      }      
+      endGame(wandID)
       playSoundEffect("Im sorry magi deep.mp3")
-      gameState.active = false
       return
     }
 
@@ -95,4 +87,23 @@ export async function lightUpNextPlayer(newColor: string) {
     }),
   })
   return response
+}
+
+export function endGame(wandID) {
+  let loser = getPlayer(wandID)
+  if (loser) {
+      console.log(loser?.username)
+      lightUpNextPlayer(loser.color)
+    } else {
+      console.log("Unknown which player was too quick")
+      lightUpNextPlayer("white")
+  }
+
+  gameState.active = false
+  console.log(wandID + " loses")
+  for (let player of gameState.players) {
+    if (player != wandID) {
+      addScoreToPlayer(player, 50)
+    }
+  }
 }
