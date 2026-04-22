@@ -23,9 +23,9 @@ logs
 .env.*
 !.env.example
 
-data.json
-playerDB.json
-sensorDB.json
+Webserver/data.json
+Webserver/playerDB.json
+Webserver/sensorDB.json
 
 .secrets.py
 .pio
